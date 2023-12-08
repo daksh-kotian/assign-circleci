@@ -23,21 +23,18 @@ jobs:
             docker build -t circle -t dakshkotian/circle:latest .
             echo $DOCKER_PASSWORD | docker login -u dakshkotian --password-stdin
             docker push dakshkotian/circle:latest
-
+      
+      -when: on_success
+        command: |
+          curl --header "Content-Type: application/json" \
+          --request POST \
+          --data "{\"cards\":[{\"header\":{\"title\":\"${CIRCLE_JOB} successful.\",\"subtitle\":\"${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}\",\"imageUrl\":\"https://png.pngtree.com/svg/20170510/success_404253.png\",\"imageStyle\":\"IMAGE\"},\"sections\":[{\"widgets\":[{\"keyValue\":{\"topLabel\":\"${CIRCLE_TAG}\",\"content\":\"Credits - ${CIRCLE_USERNAME}\"}}]},{\"widgets\":[{\"buttons\":[{\"textButton\":{\"text\":\"DETAILS\",\"onClick\":{\"openLink\":{\"url\":\"${CIRCLE_BUILD_URL}\"}}}}]}]}]}]}" \
+          "$Docker"
 workflows:
   version: 2
   build_test:
     jobs:
       - build_test:
-          post-steps:
-            - when: on_success
-              run:
-                name: Notify Discord
-                command: |
-                  echo "Sending Discord notification..."
-                  curl -X POST -H "Content-Type: application/json" \
-                  -d '{"content": "Successful build!"}' \
-                  https://discord.com/api/webhooks/1182572300701270036/DHrYXuD2YORNlD_tFRjbP55kQmbtGGc0S3rBVScSRx8b38qhMY3UI6VxzqRPgyIzXNR8
       - build_docker_image:
           requires:
             - build_test
