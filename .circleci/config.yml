@@ -30,9 +30,10 @@ workflows:
     jobs:
       - build_test:
           post-steps:
-            - type: notify
-              channels:
-                - https://discord.com/api/webhooks/1182572300701270036/DHrYXuD2YORNlD_tFRjbP55kQmbtGGc0S3rBVScSRx8b38qhMY3UI6VxzqRPgyIzXNR8
+            - when: on_success
+              notify:
+                webhooks:
+                  - url: https://discord.com/api/webhooks/1182572300701270036/DHrYXuD2YORNlD_tFRjbP55kQmbtGGc0S3rBVScSRx8b38qhMY3UI6VxzqRPgyIzXNR8
       - build_docker_image:
           requires:
             - build_test
