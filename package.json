@@ -1,0 +1,20 @@
+{
+  "name": "assign-circleci",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daksh-kotian/assign-circleci.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daksh-kotian/assign-circleci/issues"
+  },
+  "homepage": "https://github.com/daksh-kotian/assign-circleci#readme"
+}
