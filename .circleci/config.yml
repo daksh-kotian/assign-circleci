@@ -14,13 +14,13 @@ jobs:
           command: |
             if [ "${CIRCLE_JOB}" == "build_test" ] && [ "${CIRCLE_BRANCH}" == "master" ] && [ "${CIRCLE_WORKFLOW_JOB_TYPE}" == "main" ]; then
               # Escape double quotes within the JSON data
-              escaped_data=$(echo "{\"cards\":[{\"header\":{\"title\":\"${CIRCLE_JOB} successful.\",\"subtitle\":\"${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}\",\"imageUrl\":\"https://png.pngtree.com/svg/20170510/success_404253.png\",\"imageStyle\":\"IMAGE\"},\"sections\":[{\"widgets\":[{\"keyValue\":{\"topLabel\":\"${CIRCLE_TAG}\",\"content\":\"Credits - ${CIRCLE_USERNAME}\"}}]},{\"widgets\":[{\"buttons\":[{\"textButton\":{\"text\":\"DETAILS\",\"onClick\":{\"openLink\":{\"url\":\"${CIRCLE_BUILD_URL}\"}}}}]}]}]}]}" | sed 's/"/\\"/g')
+              escaped_data=$(echo "{\"content\":\"Successful build!\",\"embeds\":[{\"title\":\"${CIRCLE_JOB} successful.\",\"description\":\"${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}\",\"thumbnail\":{\"url\":\"https://png.pngtree.com/svg/20170510/success_404253.png\"},\"fields\":[{\"name\":\"Tag\",\"value\":\"${CIRCLE_TAG}\"},{\"name\":\"Credits\",\"value\":\"${CIRCLE_USERNAME}\"}],\"footer\":{\"text\":\"Details\",\"icon_url\":\"https://png.pngtree.com/svg/20170510/success_404253.png\"}}]}" | sed 's/"/\\"/g')
               
               # Use the escaped data in the curl command
               curl --header "Content-Type: application/json" \
                 --request POST \
                 --data "$escaped_data" \
-                "$Docker"
+                "https://discord.com/api/webhooks/1182572300701270036/DHrYXuD2YORNlD_tFRjbP55kQmbtGGc0S3rBVScSRx8b38qhMY3UI6VxzqRPgyIzXNR8"
             else
               echo "Not sending notification. Condition not met."
             fi
