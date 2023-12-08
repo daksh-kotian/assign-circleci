@@ -20,22 +20,19 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            docker build -t circle -t dakshkotian/circle:latest .
+            docker build -t htmlApp -t dakshkotian/htmlApp:latest .
             echo $DOCKER_PASSWORD | docker login -u dakshkotian --password-stdin
-            docker push dakshkotian/circle:latest
+            docker push dakshkotian/htmlApp:latest
 
 workflows:
- 
+  version: 2
   build_test:
     jobs:
-      - build_test
+      - build_test:
+          post-steps:
+            - type: notify
+              channels:
+                - https://discord.com/api/webhooks/1182572300701270036/DHrYXuD2YORNlD_tFRjbP55kQmbtGGc0S3rBVScSRx8b38qhMY3UI6VxzqRPgyIzXNR8
       - build_docker_image:
           requires:
             - build_test
-    notify:
-      webhooks:
-        - url: https://discord.com/api/webhooks/1182572300701270036/DHrYXuD2YORNlD_tFRjbP55kQmbtGGc0S3rBVScSRx8b38qhMY3UI6VxzqRPgyIzXNR8
-      email:
-        to:
-          - dakshkotian83@gmail.com
-      when: on_success
