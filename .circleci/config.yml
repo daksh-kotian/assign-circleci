@@ -31,9 +31,12 @@ workflows:
       - build_test:
           post-steps:
             - when: on_success
-              notify:
-                webhooks:
-                  - url: https://discord.com/api/webhooks/1182572300701270036/DHrYXuD2YORNlD_tFRjbP55kQmbtGGc0S3rBVScSRx8b38qhMY3UI6VxzqRPgyIzXNR8
+              run:
+                name: Notify Discord
+                command: |
+                  curl -X POST -H "Content-Type: application/json" \
+                  -d '{"content": "Successful build!"}' \
+                  https://discord.com/api/webhooks/1182572300701270036/DHrYXuD2YORNlD_tFRjbP55kQmbtGGc0S3rBVScSRx8b38qhMY3UI6VxzqRPgyIzXNR8
       - build_docker_image:
           requires:
             - build_test
