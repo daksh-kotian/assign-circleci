@@ -9,15 +9,20 @@ jobs:
       - run:
           name: Install npm dependencies
           command: npm install --save
-    # Add a conditional step for notifications
       - run:
           name: Notify Discord
           command: |
             if [ "${CIRCLE_JOB}" == "build_test" ] && [ "${CIRCLE_BRANCH}" == "master" ] && [ "${CIRCLE_WORKFLOW_JOB_TYPE}" == "main" ]; then
+              # Escape double quotes within the JSON data
+              escaped_data=$(echo "{\"cards\":[{\"header\":{\"title\":\"${CIRCLE_JOB} successful.\",\"subtitle\":\"${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}\",\"imageUrl\":\"https://png.pngtree.com/svg/20170510/success_404253.png\",\"imageStyle\":\"IMAGE\"},\"sections\":[{\"widgets\":[{\"keyValue\":{\"topLabel\":\"${CIRCLE_TAG}\",\"content\":\"Credits - ${CIRCLE_USERNAME}\"}}]},{\"widgets\":[{\"buttons\":[{\"textButton\":{\"text\":\"DETAILS\",\"onClick\":{\"openLink\":{\"url\":\"${CIRCLE_BUILD_URL}\"}}}}]}]}]}]}" | sed 's/"/\\"/g')
+              
+              # Use the escaped data in the curl command
               curl --header "Content-Type: application/json" \
-              --request POST \
-              --data "{\"cards\":[{\"header\":{\"title\":\"${CIRCLE_JOB} successful.\",\"subtitle\":\"${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}\",\"imageUrl\":\"https://png.pngtree.com/svg/20170510/success_404253.png\",\"imageStyle\":\"IMAGE\"},\"sections\":[{\"widgets\":[{\"keyValue\":{\"topLabel\":\"${CIRCLE_TAG}\",\"content\":\"Credits - ${CIRCLE_USERNAME}\"}}]},{\"widgets\":[{\"buttons\":[{\"textButton\":{\"text\":\"DETAILS\",\"onClick\":{\"openLink\":{\"url\":\"${CIRCLE_BUILD_URL}\"}}}}]}]}]}]}" \
-              "$Docker"
+                --request POST \
+                --data "$escaped_data" \
+                "$Docker"
+            else
+              echo "Not sending notification. Condition not met."
             fi
 
   build_docker_image:
