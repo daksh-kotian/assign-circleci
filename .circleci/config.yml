@@ -34,6 +34,7 @@ workflows:
               run:
                 name: Notify Discord
                 command: |
+                  echo "Sending Discord notification..."
                   curl -X POST -H "Content-Type: application/json" \
                   -d '{"content": "Successful build!"}' \
                   https://discord.com/api/webhooks/1182572300701270036/DHrYXuD2YORNlD_tFRjbP55kQmbtGGc0S3rBVScSRx8b38qhMY3UI6VxzqRPgyIzXNR8
