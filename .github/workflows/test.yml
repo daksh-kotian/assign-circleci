@@ -3,10 +3,10 @@ name: Build
 on:
   push:
     branches:
-      - dev1
+      - main
   workflow_dispatch:
     branches:
-      - main
+      - dev
 
 jobs:
   build:
