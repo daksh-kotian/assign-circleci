@@ -6,7 +6,7 @@ on:
       - main
   workflow_dispatch:
     branches:
-      - dev
+      - dev1
 
 jobs:
   build:
