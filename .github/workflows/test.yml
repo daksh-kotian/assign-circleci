@@ -3,6 +3,9 @@ name: Build
 on:
   push:
     branches:
+      - dev1
+  workflow_dispatch:
+    branches:
       - main
 
 jobs:
@@ -15,25 +18,64 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # Run npm install
+      - name: Install Dependencies
+        run: npm install
+        # Comment out the other steps
+        # - uses: sonarsource/sonarqube-scan-action@master
+        #   env:
+        #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        #
+        # - name: Check SonarQube Quality Gate
+        #   run: |
+        #     response=$(curl -sS -u "${{ secrets.SONAR_TOKEN }}": "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=your_project_key")
+        #     high_impact=$(echo "$response" | jq -r '.projectStatus.conditions[] | select(.metricKey == "new_security_rating" and .status == "ERROR") | .actualValue')
+        #     if [ "$high_impact" -gt 4 ]; then
+        #       echo "Number of high impact issues is greater than 4. Failing the job."
+        #       exit 1
+        #     else
+        #       echo "Number of high impact issues is within acceptable limits."
+        #     fi
 
-      # Custom step to check the number of high impact issues
-      - name: Check SonarQube Quality Gate
-        run: |
-          # Get the JSON response from SonarQube API
-          response=$(curl -sS -u "${{ secrets.SONAR_TOKEN }}": "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=your_project_key")
-          # Extract the number of high impact issues
-          high_impact=$(echo "$response" | jq -r '.projectStatus.conditions[] | select(.metricKey == "new_security_rating" and .status == "ERROR") | .actualValue')
-          # Check if the number of high impact issues is greater than 4
-          if [ "$high_impact" -gt 4 ]; then
-            echo "Number of high impact issues is greater than 4. Failing the job."
-            exit 1
-          else
-            echo "Number of high impact issues is within acceptable limits."
-          fi
+
+
+# name: Build
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   build:
+#     name: Build
+#     runs-on: ubuntu-latest
+#     permissions: read-all
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+#       - uses: sonarsource/sonarqube-scan-action@master
+#         env:
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+#       # Custom step to check the number of high impact issues
+#       - name: Check SonarQube Quality Gate
+#         run: |
+#           # Get the JSON response from SonarQube API
+#           response=$(curl -sS -u "${{ secrets.SONAR_TOKEN }}": "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=your_project_key")
+#           # Extract the number of high impact issues
+#           high_impact=$(echo "$response" | jq -r '.projectStatus.conditions[] | select(.metricKey == "new_security_rating" and .status == "ERROR") | .actualValue')
+#           # Check if the number of high impact issues is greater than 4
+#           if [ "$high_impact" -gt 4 ]; then
+#             echo "Number of high impact issues is greater than 4. Failing the job."
+#             exit 1
+#           else
+#             echo "Number of high impact issues is within acceptable limits."
+#           fi
 
 
       
