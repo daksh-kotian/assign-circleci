@@ -37,7 +37,7 @@ jobs:
 # jobs:
 #   example-job:
 #     runs-on: ubuntu-latest
-#     steps:
+#     steps:a
 #       - name: Get variables from secret
 #         run: |
 #           # Parse JSON string stored in GitHub Secret
