@@ -4,17 +4,10 @@ on:
   push:
     branches:
       - main
+  # Optionally enable manual triggering for a specific branch
   # workflow_dispatch:
   #   branches:
       - dev1
-
-
-# name: CI/CD Workflow
-
-# on:
-#   push:
-#     branches:
-#       - main
 
 jobs:
   example-job:
@@ -37,17 +30,8 @@ jobs:
             echo "::set-env name=$VAR_NAME::$VAR_VALUE"
           done
 
-      # Example of using the variables in your workflow steps
-      - name: Use variable1
-        run: echo "Variable 1 value: $variable1"
-
-      - name: Use variable2
-        run: echo "Variable 2 value: $variable2"
-
-      - name: Use variable3
-        run: echo "Variable 3 value: $variable3"
-
      
+
 
 
 
