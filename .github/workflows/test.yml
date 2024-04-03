@@ -13,17 +13,27 @@ jobs:
   example-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Decode and parse variables
+      - name: Get variables from secret
         run: |
-          # Retrieve encoded string from GitHub Secret
-          ENCODED_STRING=$(echo "${{ secrets.MY_SECRET }}" | base64 --decode)
+          # Retrieve the delimited string from the GitHub Secret
+          VARIABLES=$(echo "${{ secrets.MY_SECRET }}")
 
-          # Parse combined string to extract individual variables
-          IFS=';' read -ra VARIABLES <<< "$ENCODED_STRING"
-          for VARIABLE in "${VARIABLES[@]}"; do
-            IFS='=' read -r KEY VALUE <<< "$VARIABLE"
-            echo "$KEY: $VALUE"
+          # Split the string into an array based on the newline delimiter
+          IFS=$'\n' read -rd '' -a VARIABLE_ARRAY <<<"$VARIABLES"
+
+          # Loop through the array to set each variable
+          for VAR in "${VARIABLE_ARRAY[@]}"; do
+            # Extract variable name and value
+            VAR_NAME=$(echo "$VAR" | cut -d '=' -f1)
+            VAR_VALUE=$(echo "$VAR" | cut -d '=' -f2-)
+
+            # Set the variable as an environment variable
+            echo "::set-env name=$VAR_NAME::$VAR_VALUE"
           done
+      - name: Use variable1
+        run: echo "Variable 1 value: $variable1"
+
+
 
 
 # jobs:
