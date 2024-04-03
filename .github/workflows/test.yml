@@ -9,26 +9,7 @@ on:
   #   branches:
       - dev1
 
-jobs:
-  example-job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get variables from secret
-        env:
-          MY_SECRET: ${{ secrets.MY_SECRET }}
-        run: |
-          # Split the string into an array based on the newline delimiter
-          IFS=$'\n' read -rd '' -a VARIABLE_ARRAY <<<"$MY_SECRET"
 
-          # Loop through the array to set each variable
-          for VAR in "${VARIABLE_ARRAY[@]}"; do
-            # Extract variable name and value
-            VAR_NAME=$(echo "$VAR" | cut -d '=' -f1)
-            VAR_VALUE=$(echo "$VAR" | cut -d '=' -f2-)
-
-            # Set the variable as an environment variable
-            echo "::set-env name=$VAR_NAME::$VAR_VALUE"
-          done
 
      
 
@@ -36,20 +17,20 @@ jobs:
 
 
 
-# jobs:
-#   example-job:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Get variables from secret
-#         run: |
-#           # Parse JSON string stored in GitHub Secret
-#           VARIABLES=$(echo "${{ secrets.xMY_SECRET }}" | jq -r .)
+jobs:
+  example-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get variables from secret
+        run: |
+          # Parse JSON string stored in GitHub Secret
+          VARIABLES=$(echo "${{ secrets.xMY_SECRET }}" | jq -r .)
 
-#           # Extract specific variable
-#           VARIABLE_VALUE=$(echo "$VARIABLES" | jq -r '.variable1')
+          # Extract specific variable
+          VARIABLE_VALUE=$(echo "$VARIABLES" | jq -r '.variable1')
 
-#           # Set the extracted variable as an environment variable
-#           echo "Variable 1 value: $VARIABLE_VALUE"
+          # Set the extracted variable as an environment variable
+          echo "Variable 1 value: $VARIABLE_VALUE"
 
 # jobs:
 #   npm_install_main:
