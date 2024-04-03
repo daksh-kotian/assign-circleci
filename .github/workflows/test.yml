@@ -9,17 +9,23 @@ on:
       - dev1
 
 
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   example-job:
     runs-on: ubuntu-latest
     steps:
       - name: Get variables from secret
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
         run: |
-          # Retrieve the delimited string from the GitHub Secret
-          VARIABLES=$(echo "${{ secrets.MY_SECRET }}")
-
           # Split the string into an array based on the newline delimiter
-          IFS=$'\n' read -rd '' -a VARIABLE_ARRAY <<<"$VARIABLES"
+          IFS=$'\n' read -rd '' -a VARIABLE_ARRAY <<<"$MY_SECRET"
 
           # Loop through the array to set each variable
           for VAR in "${VARIABLE_ARRAY[@]}"; do
@@ -30,6 +36,17 @@ jobs:
             # Set the variable as an environment variable
             echo "::set-env name=$VAR_NAME::$VAR_VALUE"
           done
+
+      # Example of using the variables in your workflow steps
+      - name: Use variable1
+        run: echo "Variable 1 value: $variable1"
+
+      - name: Use variable2
+        run: echo "Variable 2 value: $variable2"
+
+      - name: Use variable3
+        run: echo "Variable 3 value: $variable3"
+
      
 
 
