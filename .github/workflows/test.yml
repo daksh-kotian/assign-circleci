@@ -13,16 +13,17 @@ jobs:
   example-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Get encoded variables from secret
+      - name: Decode and parse variables
         run: |
-          VARIABLES=$(echo "${{ secrets.MY_SECRET }}" | jq -r '.')
-          VARIABLE1=$(echo "$VARIABLES" | jq -r '.variable1')
-          VARIABLE2=$(echo "$VARIABLES" | jq -r '.variable2')
-          VARIABLE3=$(echo "$VARIABLES" | jq -r '.variable3')
-        env:
-          VARIABLE1: ${{ env.VARIABLE1 }}
-          VARIABLE2: ${{ env.VARIABLE2 }}
-          VARIABLE3: ${{ env.VARIABLE3 }}
+          # Retrieve encoded string from GitHub Secret
+          ENCODED_STRING=$(echo "${{ secrets.MY_SECRET }}" | base64 --decode)
+
+          # Parse combined string to extract individual variables
+          IFS=';' read -ra VARIABLES <<< "$ENCODED_STRING"
+          for VARIABLE in "${VARIABLES[@]}"; do
+            IFS='=' read -r KEY VALUE <<< "$VARIABLE"
+            echo "$KEY: $VALUE"
+          done
 
 
 # jobs:
