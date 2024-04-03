@@ -32,7 +32,7 @@ jobs:
 #       - name: Get variables from secret
 #         run: |
 #           # Parse JSON string stored in GitHub Secret
-#           VARIABLES=$(echo "${{ secrets.MY_SECRET }}" | jq -r .)
+#           VARIABLES=$(echo "${{ secrets.xMY_SECRET }}" | jq -r .)
 
 #           # Extract specific variable
 #           VARIABLE_VALUE=$(echo "$VARIABLES" | jq -r '.variable1')
