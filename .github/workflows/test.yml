@@ -12,11 +12,6 @@ on:
 
 
      
-
-
-
-
-
 jobs:
   example-job:
     runs-on: ubuntu-latest
@@ -29,8 +24,36 @@ jobs:
           # Extract specific variable
           VARIABLE_VALUE=$(echo "$VARIABLES" | jq -r '.variable1')
 
-          # Set the extracted variable as an environment variable
+          # Check if variable1's value is equal to value1
+          if [ "$VARIABLE_VALUE" = "value1" ]; then
+            CONDITION_RESULT="true"
+          else
+            CONDITION_RESULT="false"
+          fi
+
+          # Print the result of the condition
           echo "Variable 1 value: $VARIABLE_VALUE"
+          echo "Condition result: $CONDITION_RESULT"
+
+
+
+
+
+# jobs:
+#   example-job:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Get variables from secret
+#         run: |
+#           # Parse JSON string stored in GitHub Secret
+#           VARIABLES=$(echo "${{ secrets.xMY_SECRET }}" | jq -r .)
+
+#           # Extract specific variable
+#           VARIABLE_VALUE=$(echo "$VARIABLES" | jq -r '.variable1')
+         
+
+#           # Set the extracted variable as an environment variable
+#           echo "Variable 1 value: $VARIABLE_VALUE"
 
 # jobs:
 #   npm_install_main:
