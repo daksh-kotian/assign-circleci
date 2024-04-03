@@ -4,38 +4,52 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
-    branches:
+  # workflow_dispatch:
+  #   branches:
       - dev1
-
 jobs:
-  npm_install_main:
-    name: NPM Install (Main)
-    if: github.ref == 'refs/heads/main'
+  example-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Get variables from secret
+        run: |
+          # Parse JSON string stored in GitHub Secret
+          VARIABLES=$(echo "${{ secrets.MY_SECRET }}" | jq -r .)
 
-      - name: Install dependencies
-        run: npm install
+          # Extract specific variable
+          VARIABLE_VALUE=$(echo "$VARIABLES" | jq -r '.variable1')
 
-      - name: Log message
-        run: echo "NPM Install completed for main branch"
+          # Set the extracted variable as an environment variable
+          echo "Variable 1 value: $VARIABLE_VALUE"
 
-  npm_install_dev1:
-    name: NPM Install (Dev1)
-    if: github.ref == 'refs/heads/dev1'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+# jobs:
+#   npm_install_main:
+#     name: NPM Install (Main)
+#     if: github.ref == 'refs/heads/main'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: npm install
+#       - name: Install dependencies
+#         run: npm install
 
-      - name: Log message
-        run: echo "NPM Install completed for dev1 branch"
+#       - name: Log message
+#         run: echo "NPM Install completed for main branch"
+
+#   npm_install_dev1:
+#     name: NPM Install (Dev1)
+#     if: github.ref == 'refs/heads/dev1'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Log message
+#         run: echo "NPM Install completed for dev1 branch"
 
 
 # name: Build
